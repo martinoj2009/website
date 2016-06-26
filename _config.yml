@@ -1,7 +1,7 @@
 # Site
 title:              Martino Jones
 bio:                'My personal blog.'
-description:        ""
+description:        "This is my personal blog where I talk about projects I'm working on and other technology related things."
 reading_time:       true
 words_per_minute:   200
 logo:               'assets/img/logo.jpg'
