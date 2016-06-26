@@ -1,0 +1,76 @@
+---
+layout: post
+name: powershell-detect-when-certain-key-is
+title: PowerShell - detect when a certain key is pressed
+time: 2015-03-27 20:31:00.000000000 +00:00
+---
+I was working on a script recently, I wanted the ability to run a loop, but give the user (me) the option to interrupt the loop without breaking out of the script with a Control+C. I'm not sure of an option to do this in PowerShell... so I threw one together.<br />
+<br />
+This will be using resources already built into PowerShell for retrieving the key that's pressed down, this isn't a form of key logging; although, those are possible in PowerShell as well-- Windows has about 10 API's for that. This method is detecting the key that's pressed down in your current terminal window, once you click outside that window then it won't detect the key you're pressing.<br />
+<br />
+Lets cover the first part of the process, getting the key pressed. To do this you need to understand ASCII to Hex... I will assume you know this, and if not it's pretty easy to do a quick search on this. For this part we will use ASCII character "s" and "S". So, you kind of don't really need to do it by Hex, you can just do it by ASCII... but let's just do it that way ;-). So lets make a variable and set it.<br />
+<br />
+$keyPressed = 83<br />
+<br />
+Now we need to get the key state. First we will test to make sure it works, I won't go into too much detail, mostly because it doesn't need much explaining, just look through the command and it's pretty self explanatory. Paste this into your PowerShell window:<br />
+<br />
+$host.ui.RawUI.ReadKey("NoEcho,IncludeKeyUp")<br />
+<br />
+The "NoEcho" part, if you haven't already figured it out is to suppress printing the character and then displaying what was pressed. You can also change "IncludeKeyUp" to "IncludeKeyDown" and that will simply display when you press a key down.<br />
+<br />
+Now lets throw that into a variable:<br />
+<br />
+$key =&nbsp;$host.ui.RawUI.ReadKey("NoEcho,IncludeKeyUp")<br />
+<br />
+So now we have our keys set, if you paste that in it will wait for you to press a key and once you have it will store the information into our key object.<br />
+<br />
+The next thing we can do is test to see if our key we assigned was pressed. We will use an IF statement for this, hopefully you haven't closed down you window, or you have ISE open and you still have those variables ready to go. Here's the IF statement I have constructed:<br />
+<br />
+if (($key.VirtualKeyCode -eq $keyPressed))<br />
+{<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Write-Host "You pressed the key `n"<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; break<br />
+&nbsp; }<br />
+<br />
+Now you can't throw this all together just yet... or you'll get a bunch of errors. You need one more thing, well two more... The next thing is testing to see if a key has been pressed, if not you'll get a bunch of errors. This next line will test to see if a key has been pressed: This will be thrown into an IF statement later.<br />
+<br />
+$host.ui.RawUi.KeyAvailable<br />
+<br />
+Cool, now that we have that as well you should have everything you need... well almost, you WILL need to throw this all into a loop, if not it will run once and you won't capture anything :-). SO, I'm going to throw this all together, and you are more than welcome to pick it apart, you have the knowledge of what's going on, I'll just be adding logic in.<br />
+<br />
+Warning: I tried this in the ISE and had problems with it detecting my key input. You may have better luck pasting this into PowerShell, instead of running it through the ISE.<br />
+<br />
+$keyPressed = 83<br />
+for ($i = 0; $i -gt -1; $i ++){<br />
+&nbsp; &nbsp; write-host "press s"<br />
+&nbsp; &nbsp; if ($host.ui.RawUi.KeyAvailable) {<br />
+<br />
+&nbsp; &nbsp; &nbsp; &nbsp; $key = $host.ui.RawUI.ReadKey("NoEcho,IncludeKeyUp")<br />
+&nbsp; &nbsp; &nbsp; &nbsp; if (($key.VirtualKeyCode -eq $keyPressed)){<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Write-Host "You pressed the key `n" -ForegroundColor Green<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; break<br />
+&nbsp; &nbsp; &nbsp; &nbsp; }<br />
+<br />
+&nbsp; &nbsp; }<br />
+<br />
+}<br />
+<br />
+Now, you do have the option to use a key combination, this can be done by adding the -AND operator in our IF statement. The following will require you to press Control+s to stop the loop.<br />
+<br />
+$keyPressed = 83<br />
+for ($i = 0; $i -gt -1; $i ++){<br />
+&nbsp; &nbsp; write-host "press s"<br />
+&nbsp; &nbsp; if ($host.ui.RawUi.KeyAvailable) {<br />
+<br />
+&nbsp; &nbsp; &nbsp; &nbsp; $key = $host.ui.RawUI.ReadKey("NoEcho,IncludeKeyUp")<br />
+&nbsp; &nbsp; &nbsp; &nbsp; if (($key.VirtualKeyCode -eq $keyPressed) -AND ($key.ControlKeyState -match "LeftCtrlPressed")){<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Write-Host "You pressed the key `n" -ForegroundColor Green<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; break<br />
+&nbsp; &nbsp; &nbsp; &nbsp; }<br />
+<br />
+&nbsp; &nbsp; }<br />
+<br />
+}<br />
+<br />
+<br />
+I was working on this because I'm working on a script to search the event log; although, I'm not really working on it anymore, because I had an initial use for it, but I don't really search through the event log often. I wanted it because there wasn't a quick and simple way to look through my event log looking for errors on my system. Any ways, I'll post that later, I'm sure someone can make use of it, or at least learn from some of the coding.

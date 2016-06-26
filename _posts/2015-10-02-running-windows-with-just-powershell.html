@@ -1,0 +1,42 @@
+---
+layout: post
+name: Replace Windows Desktop With PowerShell
+title: Replace Windows Desktop With PowerShell
+time: 2015-10-02 00:00:00
+tags: replace windows desktop with powershell command line
+author: Martino
+---
+
+<p> I know it sounds weird, but it's actually not that bad. From someone that likes
+  Linux because of how lightweight it is and, not going to lie, hardcore I feel
+  when I'm using it lol. I like how I can open the terminal up and just start programming
+  and scripting without having to install anything else. It's made for developers
+  to get in and just start developing. Granted it's fine as a desktop/laptop OS as well,
+  depnding on what you're doing... gaming was my biggest problem with it, but it's
+  slowly improving. Don't worry, I'm going to get into using PowerShell as your
+  desktop enviroment lol.</p>
+
+  <p> I mostly did this just to see if I could do it... I can, and it works fine.
+    Granted I have a lot of experience with PowerShell, but others that are new
+    to PowerShell can learn PowerShell MUCH better by forcing themselfs to use it
+    as a desktop enviroment. That's how I learned Linux, I would install a distro like
+    Ubuntu and remove X11 and just use command line. Windows out-of-the-box won't
+    be as useful without the GUI; however, it's still useable; you'll have to call
+    some GUI control panel applet from time to time to do something that Linux could
+    easily do in the command line built-in.</p>
+
+    <p> The setup actually isn't all that difficult. All you have to do is edit the
+      registry. Edit the
+      {% highlight ruby %} HKLocalMachine/Software/Microsoft/WindowsNT/CurrentVersion/Winlogon/Shell{% endhighlight %}
+      and change explorer.exe to powershell... that's it. :-D</p>
+
+      <p> Now, for launching applications lol, I just made a PowerShell profile and
+        started throwing aliases in there. Made an alias for: firefox, outlook and
+        a bunch of other things. That way I don't have to type in the full path, I can
+        just say firefox and it will launch the application.</p>
+
+        <p> If this doesn't teach you some PowerShell I don't know what will. You
+          just need to stay in this enviroment for a while, do searches on how to do
+          things... and for switching between applications you just have to alt-tab a lot lol,
+          or snap applications. I also put the time in the prompt, although, I'm just going
+          to either program a clock application that stays on top, or download one.</p>

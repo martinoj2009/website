@@ -1,0 +1,61 @@
+---
+layout: post
+name: microsoft-security-bulletin-982015
+title: 'Microsoft Security Bulletin 9/8/2015 '
+time: 2015-09-09 02:08:00.000000000 +00:00
+---
+Microsoft just released their Security Bulletin for 9/8/2015. There are <b>4 critical</b> vulnerabilities and <b>8 important</b> vulnerabilities. I have a little break down for the critical ones, at the bottom of the page is the source.<br />
+<div>
+<br /></div>
+<div>
+<!--more--><div>
+<br /></div>
+<div>
+Critical:</div>
+<div>
+<ol>
+<li><a href="https://technet.microsoft.com/en-us/library/security/MS15-094" target="_blank">MS15-094:&nbsp;Cumulative Security Update for Internet Explorer</a></li>
+<li><a href="https://technet.microsoft.com/en-us/library/security/MS15-095" target="_blank">MS15-095:&nbsp;Cumulative Security Update for Microsoft Edge</a></li>
+<li><a href="https://technet.microsoft.com/en-us/library/security/MS15-097" target="_blank">MS15-097:&nbsp;Vulnerabilities in Microsoft Graphics Component Could Allow Remote Code Execution</a></li>
+<li><a href="https://technet.microsoft.com/en-us/library/security/MS15-098" target="_blank">MS15-098:&nbsp;Vulnerabilities in Windows Journal Could Allow Remote Code Execution</a></li>
+</ol>
+<div>
+Important:</div>
+</div>
+<div>
+<ol>
+<li>MS15-096:&nbsp;Vulnerability in Active Directory Service Could Allow Denial of Service</li>
+<li>MS15-099:&nbsp;Vulnerabilities in Microsoft Office Could Allow Remote Code Execution</li>
+<li>MS15-100:&nbsp;Vulnerability in Windows Media Center Could Allow Remote Code Execution</li>
+<li>MS15-101:&nbsp;Vulnerabilities in .NET Framework Could Allow Elevation of Privilege</li>
+<li>MS15-102:&nbsp;Vulnerabilities in Windows Task Management Could Allow Elevation of Privilege</li>
+<li>MS15-103:&nbsp;Vulnerabilities in Microsoft Exchange Server Could Allow Information Disclosure</li>
+<li>MS15-104:&nbsp;Vulnerabilities in Skype for Business Server and Lync Server Could Allow Elevation of Privilege</li>
+<li>MS15-105:&nbsp;Vulnerability in Windows Hyper-V Could Allow Security Feature Bypass</li>
+</ol>
+<div>
+<a href="https://technet.microsoft.com/en-us/library/security/MS15-094" target="_blank">MS15-094</a> covers IE9 to IE11 on Windows 7 through Windows 10 as long as that version of IE can be installed on that OS. This could lead to remote code execution, an attacker can corrupt parts of memory that would allow them to execute code on a victims system. The code would run as that user, but if the attacker also uses a privilege escalation vulnerability they can run as an administrator if the victim isn't already an administrator. Microsoft has a temporary workaround, restricting access to both:&nbsp;vbscript.dll and jscript.dll<span style="font-family: Consolas, Courier, monospace;"><span style="font-size: 13px; line-height: 17.5499992370605px;">.</span></span></div>
+</div>
+<div>
+<br /></div>
+<div>
+<a href="https://technet.microsoft.com/en-us/library/security/MS15-095" target="_blank">MS15-095</a> this covers Microsoft Edge on Windows 10 and like MS15-094, could lead to remote code execution. Microsoft has no workaround at this time.&nbsp;</div>
+<div>
+<br /></div>
+<div>
+<a href="https://technet.microsoft.com/en-us/library/security/MS15-097" target="_blank">MS15-097</a> is a vulnerability for Windows (Vista and Server 2008), Microsoft Office, and Microsoft Lync. This is another remote code execution that could effect you if you visit a website that takes advantage of this attack, or view documents that utilizes this vulnerability. There's a temporary workaround, see the vulnerability details.&nbsp;</div>
+<div>
+<br /></div>
+<div>
+<a href="https://technet.microsoft.com/en-us/library/security/MS15-098" target="_blank">MS15-098</a> is a vulnerability in Microsoft Windows' Journal while parsing journal files. This could lead to remote code execution. This affects Windows Vista through Windows 10.&nbsp;</div>
+<div>
+<br /></div>
+<div>
+Source:&nbsp;<a href="https://technet.microsoft.com/en-us/security/bulletin/dn602597.aspx">https://technet.microsoft.com/en-us/security/bulletin/dn602597.aspx</a>&nbsp;</div>
+<div>
+<br /></div>
+<div>
+<br /></div>
+<div>
+<br /></div>
+</div>

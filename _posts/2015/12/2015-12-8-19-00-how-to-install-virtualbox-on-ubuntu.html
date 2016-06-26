@@ -1,0 +1,85 @@
+---
+layout: post
+title: How To Install VirtualBox On Ubuntu 15.10, 15.04, 14.04, 12.04
+name: How To Install VirtualBox On Ubuntu 15.10, 15.04, 14.04, 12.04
+date: 2015-12-8 19:00:00
+tags: how to install virtualbox on ubuntu update to new version
+---
+
+<body>
+
+  <p>
+    I've had this problem a couple times, it's because I don't have to do it often. Once it's installed I don't have to do it again unless I uninstall it for some reason. If you already have VirtualBox and you just want to update to the new version you can follow this as well, you just don't have to install VirtualBox. After doing this the new version should be in your updates.
+  </p>
+
+  <h1> Don't use the Ubuntu repository </h1>
+
+  <p>
+    I would recommend getting VirtualBox from them, not through the Ubuntu repository. It's typically out of date, or it has had the problem when I last used it. For the past couple of years I just get it from the devs.
+    It's not hard to do really, you just need to add their repository and key.
+  </p>
+
+  <h1> Installation </h1>
+
+  <p>
+    The process REALLY isn't that hard. Just takes 4 commands:
+  </p>
+
+  <p>
+    Fist, we need to add the repository:
+  </p>
+
+  <p>
+    {% highlight text %}
+    sudo sh -c 'echo "deb http://download.virtualbox.org/virtualbox/debian $(lsb_release -cs) contrib" >> /etc/apt/sources.list.d/virtualbox.list'
+    {% endhighlight %}
+  </p>
+
+  <p>
+    Next, we need to add the GPG key:
+  </p>
+
+  <p>
+    {% highlight text %}
+    sudo wget -q https://www.virtualbox.org/download/oracle_vbox.asc -O- | sudo apt-key add -
+    {% endhighlight %}
+  </p>
+
+  <p>
+    Now, we need to update the repos:
+  </p>
+
+  <p>
+    {% highlight text %}
+    sudo apt-get update
+    {% endhighlight %}
+  </p>
+
+  <p>
+    Finally, we need to install VirtualBox:
+  </p>
+
+  <p>
+    I will be doing this for VirtualBox 5... download what version you want.
+    {% highlight text %}
+     sudo apt-get install virtualbox-5.0
+     {% endhighlight %}
+   </p>
+
+   <h1> Now join the group </h1>
+
+   <p>
+     Now that we have VirtualBox installed you should add your account to the vboxusers group:
+   </p>
+
+   <p>
+     {% highlight text %}
+     sudo usermod -a -G vboxusers $USER
+     {% endhighlight %}
+   </p>
+
+   <h1> Done </h1>
+
+   <p>
+     That's it, now you MAY need to reboot your machine, but I didn't have to.
+   </p>

@@ -1,0 +1,66 @@
+---
+layout: post
+name: fix-just-about-any-windows-update-issue
+title: Fix just about any Windows Update issue
+time: 2015-03-22 18:57:00.000000000 +00:00
+---
+I've seen a lot of Windows Updates issues, and no I'm not talking about updates breaking your system, I'm talking about Windows Updates not working at all. I'm sure you've probably seen it at least once before. I know I have, when ever I fix someones computer I always check Windows Updates to make sure it's working properly and I typically run into an error that the user has been ignoring.<br />
+<br />
+Well I made a script for that, this one I made in Batch because you never know what version of Windows or PowerShell they are running, and it's faster than doing a "<b>powershell set-executionpolicy unrestricted</b>" and then running my script. PowerShell is also a bit slower with runtime, Batch is old and fast :-). <br />
+<br />
+I made this thing years ago, back when I graduated high school when
+Windows XP was out, it's worked on Windows all the way up to a recent
+Windows 10 (10041) issue I had. Any who here's my script, I commented as much of it as I could, it says it's for a certain error but really it works for almost every Windows Updates error I've had.<br />
+<br />
+<i><b>*All you have to do is copy this, open Notepad (or what ever text editor like Sublime), then save it as a .bat file, then just double-click the file*</b></i><br />
+
+{% highlight ruby %}
+
+REM START
+REM Martino Jones
+@echo off
+REM // This script will fix the 80246003 error after you have updated from Windows 7 to Windows 8
+REM // ***This MUST be run as Administrator***
+
+REM // This will first stop the Windows Update Service from running so the SoftwareDistribution REM folder can be modified
+net stop wuauserv
+net stop bits
+
+
+REM // Now change to the systemroot
+cd %systemroot%
+
+REM // This will give the service enough time to let go of the folder if needed
+ping 127.0.0.1 -n 5 &gt; NULL
+
+REM // This line will rename the old SoftwareDistribution to SoftwareDistribution.old
+REM // If you get an access denied then there is a program still holding on to the folder, you may need to reboot
+ren SoftwareDistribution SoftwareDistribution.old
+
+REM // This will re-register files needed for Windows Update
+regsvr32 /s wuapi.dll
+regsvr32 /s wuaueng.dll
+regsvr32 /s wuaueng1.dll
+regsvr32 /s atl.dll
+regsvr32 /s wucltui.dll
+regsvr32 /s wups.dll
+regsvr32 /s wups2.dll
+regsvr32 /s wuweb.dll
+
+
+REM // This will now start the Windows Update Service
+net start wuauserv
+net start bits
+
+REM // This will now delete the old folder (optional)
+rmdir /Q /S SoftwareDistribution.old
+
+REM //This will force a Windows Update (optional), the last one brings up the Windows Update Window in the Control Panel.
+wuauclt /ReportNow /DetectNow
+wuauctl /UpdateNow
+wuauclt /ShowWU
+REM END
+{% endhighlight %}
+<br />
+<br />
+Share with who ever you want, it's free to share or reuse how ever you want.

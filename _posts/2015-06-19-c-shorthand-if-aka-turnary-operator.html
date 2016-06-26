@@ -1,0 +1,58 @@
+---
+layout: post
+name: c-shorthand-if-aka-turnary-operator
+title: C shorthand IF aka Turnary Operator
+time: 2015-06-19 22:21:00.000000000 +00:00
+tags: c programming turnary shorthand short hand if statement
+---
+So I was playing around with C trying to see if I remember it because it has been a while since I wrote in that language. As I was playing around with it I started to remember some lazy methods for coding, so I figured I would put it here for my future reference, and others I guess.<br />
+<br />
+<br />
+<!--more--><br />
+<br />
+<br />
+This is going to be a short write since this is just for me to come back to, and the example doesn't really do much, so don't expect to be blown away. It just asks for two numbers and prints the biggest number to a file... pretty useless lol, but in conjunction with something else it could be useful.<br />
+<br />
+LINE 20 IS THE TURNARY OPERATOR <br />
+<br />
+
+{% highlight c %}
+#include <stdio.h>
+#include <stdbool.h>
+
+/*
+Don't use this code for ANYTHING in production!! This is NOT secure!!!
+Martino Jones
+*/
+
+int main()
+{
+   bool infLoop = 1;
+   do
+   {
+           int x,y,r;
+   printf("Give value for X: ");
+   scanf("%d", &x);
+   printf("Give value for Y: ");
+   scanf("%d", &y);
+   if(x == 0 || y == 0){infLoop = 0;}
+   r=(x>y)?x:y;    //TURNARY OPERATOR
+   printf("The biggest number is: %d\n\n", r);
+
+   //open file and append
+   FILE *textFile = fopen("file.txt", "a");
+   if(textFile == NULL)
+   {
+       printf("Error opening file!\n");
+       exit(1);
+   }
+   const char *text = "The biggest number was: ";
+   fprintf(textFile, "%s %d\n",text, r);
+   fclose(textFile);
+
+   } while (infLoop == 1);
+
+   return 0;
+
+}
+{% endhighlight %}

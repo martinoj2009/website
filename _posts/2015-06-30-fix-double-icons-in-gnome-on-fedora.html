@@ -1,0 +1,53 @@
+---
+layout: post
+name: fix-double-icons-in-gnome-on-fedora
+title: Fix double icons in GNOME on Fedora Linux
+time: 2015-06-30 02:43:00.000000000 +00:00
+---
+So I installed Chrome on my computer, I have just been using Friefox as it works fine for the most part, except I like to run Android apps every once in a while (Linux doesn't have a good podcast program that I like, so I use an Android podcast app), and Chrome also provides some other useful things.<br />
+<br />
+So I installed it, and of course added it to my favorites. Once I launch it I get two Chrome icons... yeah, removing it and re-adding doesn't fix it, and it only makes that second icon when you launch the application... so what's going on?<br />
+<br />
+<br />
+<!--more--><br />
+<br />
+<br />
+<div class="separator" style="clear: both; text-align: center;">
+<a href="http://2.bp.blogspot.com/-z_06wkHl19Y/VZH-a9w7k8I/AAAAAAAAEXg/zhOGU9qiB0E/s1600/favorites.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" height="320" src="http://2.bp.blogspot.com/-z_06wkHl19Y/VZH-a9w7k8I/AAAAAAAAEXg/zhOGU9qiB0E/s320/favorites.png" width="60" /></a></div>
+<br />
+<br />
+Well the icon is launching "<b>google-chrome-stable</b>" that's not what is launched...<br />
+<br />
+So how do you fix this!!! Well, it's actually pretty easy. You need to modify the <b>google-chrome.desktop</b> file in your <b>/usr/share/applications</b> folder. If you don't want to share with other users, or you don't have root access you can also do this to your <b>~/.local/share/applications</b> folder for just your account... although if there's one in your <b>/usr/share/applications</b> folder when you search for "<b><i>Google Chrome</i></b>" you will get two results, you can fix this by changing the name slightly... it won't matter, especially if it's pinned to your favorites.<br />
+<br />
+<br />
+<br />
+So this is the before:<br />
+<br />
+<div class="separator" style="clear: both; text-align: center;">
+<a href="http://4.bp.blogspot.com/-BAiAAygsiPE/VZIADxgCazI/AAAAAAAAEX0/b0y9A3EUfGc/s1600/before.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" height="320" src="http://4.bp.blogspot.com/-BAiAAygsiPE/VZIADxgCazI/AAAAAAAAEX0/b0y9A3EUfGc/s320/before.png" width="283" /></a></div>
+<br />
+<br />
+<br />
+<br />
+After:<br />
+<br />
+<br />
+<div class="separator" style="clear: both; text-align: center;">
+<a href="http://4.bp.blogspot.com/-vHRcVCNf68E/VZH_13BjftI/AAAAAAAAEXs/IdepIEdzBZM/s1600/term1.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" height="320" src="http://4.bp.blogspot.com/-vHRcVCNf68E/VZH_13BjftI/AAAAAAAAEXs/IdepIEdzBZM/s320/term1.png" width="283" /></a></div>
+<br />
+Now this is in your file at least 3 times... or at least it was in mine... so if you're using VI just /Exec to find the next string, if you don't know how to use vi... learn:<br />
+<br />
+http://www.lagmonster.org/docs/vi.html#search<br />
+<br />
+Once you're done, just :wq<br />
+<br />
+Now you're not done... now you need to move and move the file back, we want this to happen now. So just:<br />
+mv google-chrome.desktop google-chrome<br />
+mv google-chrome google-chrome.desktop<br />
+<br />
+Now, if you still have Chrome added to your favorites you need to remove it and then re-add it... after that you should be good... if not you did it wrong ;-D.<br />
+<br />
+<div class="separator" style="clear: both; text-align: center;">
+<a href="http://1.bp.blogspot.com/-wczaj_BH_JM/VZIBbfOXLSI/AAAAAAAAEYE/XhH5-3xNHYE/s1600/done.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" height="320" src="http://1.bp.blogspot.com/-wczaj_BH_JM/VZIBbfOXLSI/AAAAAAAAEYE/XhH5-3xNHYE/s320/done.png" width="59" /></a></div>
+<br />

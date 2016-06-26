@@ -1,0 +1,41 @@
+---
+layout: post
+name: play-starcraft-in-web-browser-using
+title: Play Starcraft in a web browser using HTML5
+time: 2015-09-09 00:35:00.000000000 +00:00
+---
+I was browsing the Internet and ran across some cool project on GitHub from gloomyson, it's a project that will allow you to play StarCraft in a web browser using HTML5. I have to admit when I saw this I got excited, I use to play this and Command and Conquer back in the day on Windows 98. I put too many hours into this game and Command and Conquer. I fire up StarCraft 2 and Command and Conquer Zero Hour every once in a while. I love a good RTS.<br />
+<div>
+<br /></div>
+<div>
+<!--more--></div>
+<div>
+<br /></div>
+<div>
+<span style="color: red;">Let me start by saying this doesn't run the best (as of 9/8/2015), not just fps, but also interaction (UX?).</span></div>
+<div>
+<br /></div>
+<div>
+So if you want to give it a try I'll show you how to install it on an Apache server using Ubuntu, but you can use what ever OS you want with Apache. I didn't try this with anything other than Apache because that's something everyone has access to for free.</div>
+<div>
+<br /></div>
+<div>
+From Ubuntu you can do a:</div>
+<blockquote class="tr_bq">
+sudo apt-get install apache2 -y</blockquote>
+&nbsp;Then type in your password if prompted. Now we need to grab this project. After Apache 2 is done downloading you can move over to your html directory.<br />
+<blockquote class="tr_bq">
+cd /var/www/html</blockquote>
+You can remove anything under this folder if you don't need anything here. If you have files you want to keep you can just clone the git repository down to its own folder.<br />
+<br />
+If you don't want any of the files you can:<br />
+<blockquote class="tr_bq">
+rm -rf /var/www/html/*&nbsp;</blockquote>
+<blockquote class="tr_bq">
+git clone https://github.com/gloomyson/StarCraft.git .</blockquote>
+If you want your files you can:<br />
+<blockquote class="tr_bq">
+git clone&nbsp;https://github.com/gloomyson/StarCraft.git</blockquote>
+&nbsp;That's it, you should then be able to browse to http://(ip address). If you don't know the IP address then you can do an <b>ifconfig</b> or <b>ip addr</b>.<br />
+<br />
+Now multiple people can access the site at once to play, however, there's no multiplayer at this time (9/8/2015).

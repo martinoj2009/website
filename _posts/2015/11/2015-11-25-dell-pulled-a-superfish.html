@@ -1,0 +1,50 @@
+---
+layout: post
+title: Dell Pulls A Superfish
+name: Dell Pulls A Superfish
+date: 2015-11-25 12:00:00
+tags: dell superfish self signed cert certificate root
+---
+
+<body>
+
+<h1> Superfish </h1>
+
+<p>
+I can't really talk about this too much unless you know about what happened with Superfish... I don't want to focus on it too much, so here's what Sophos says:
+</p>
+<p>
+{% highlight text %}
+Your browser thinks it made an end-to-end encrypted connection, and in a sense it did, except that the other end of the connection was not the example.com server – it was the Superfish filter on your own computer.
+{% endhighlight %}
+
+<a href="https://nakedsecurity.sophos.com/2015/02/20/the-lenovo-superfish-controversy-what-you-need-to-know/">Lenovo “Superfish” controversy – what you need to know</a>
+
+</p>
+
+
+
+<h1> Not Long After Superfish </h1>h1>
+
+
+
+<p>
+  <a href="https://cdn.arstechnica.net/wp-content/uploads/2015/11/mmc.png" target="_blank">
+<img src="https://cdn.arstechnica.net/wp-content/uploads/2015/11/mmc.png" alt="Ubuntu Facts">
+</a>
+</p>
+
+<p> 
+Lenovo got a lot of crap for this, and now it's an on-going joke in the tech world... You would think how bad they got ripped into no other company would try the same thing... YOU THOUGHT WRONG ;-). 
+</p>
+
+<p>
+If you look at the signing date of Dell's cert it's just a couple months after the Superfish controversy with Lenovo... why... whhhyyyyy?????
+</p>
+
+<h1> What Can An Attacker Do? </h1>
+
+<p>
+Well, if an attacker can crack the cert, because it's the same cert on everyones machine, they can perform man-in-the-middle attacks (pretend to be what ever site they want), sign malicious code, sign malicious drivers, and much more because the cert was made to be a general purpose use cert, it has no restictions. 
+</p>
+
