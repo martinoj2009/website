@@ -30,9 +30,9 @@ disqus_shortname:   martinoj2009
 
 # Social
 # if you don't have any of social below, comment the line.
-#google:
-  #plus:            #username
-  #analytics:
+google:
+  plus: martinoj2009
+  analytics: UA-79568415-1
   #verify:
   #ad-client:
   #ad-slot:
